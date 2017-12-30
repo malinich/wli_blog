@@ -1,10 +1,10 @@
+import asyncio
 import re
 
-import asyncio
 import tornado.platform.asyncio
-from tornado.web import Application
 from motor.motor_asyncio import AsyncIOMotorClient
-from umongo.document import DocumentImplementation
+from tornado.web import Application
+from umongo.document import MetaDocumentImplementation
 from umongo.frameworks import MotorAsyncIOInstance
 from umongo.template import MetaTemplate
 
@@ -51,7 +51,6 @@ class MetaBaseModel(type):
 
 
 class MetaBaseTemplate(MetaBaseModel, MetaTemplate):
-
     class Meta:
         pass
 
@@ -67,7 +66,7 @@ async def create_index():
         for name in (m for m in dir(models) if re.match(r'[A-Z]', m)):
             model = getattr(models, name)
 
-            if issubclass(model, DocumentImplementation) and \
+            if isinstance(model, MetaDocumentImplementation) and \
                     hasattr(model, '__collection__'):
                 await model.ensure_indexes()
 

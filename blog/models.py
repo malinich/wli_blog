@@ -9,7 +9,7 @@ from app import MetaBaseTemplate
 class Comment(EmbeddedDocument, metaclass=MetaBaseTemplate):
     user = fields.UUIDField(required=True)
     text = fields.StringField(validate=validate.Length(min=3), required=True)
-    created = fields.DateTimeField(missing=datetime.datetime.now)
+    created = fields.DateTimeField(missing=datetime.datetime.utcnow)
 
 
 class Areal(EmbeddedDocument, metaclass=MetaBaseTemplate):
